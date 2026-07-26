@@ -57,3 +57,67 @@ def test_get_gods_returns_poseidon(client, sample_data):
 
     assert len(data) == 1
     assert data[0]["name"] == "Poseidon"
+
+
+def test_create_character(client):
+    response = client.post(
+        "/characters",
+        params={
+            "name": "Annabeth Chase",
+            "age": 16,
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["message"] == "Created"
+    assert data["character"] == "Annabeth Chase"
+
+
+def test_update_character(client, sample_data):
+    percy = sample_data["percy"]
+
+    response = client.put(
+        f"/characters/{percy.id}",
+        params={"status": "missing"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["message"] == "Updated"
+    assert data["character"] == "Percy Jackson"
+    assert data["new_status"] == "missing"
+
+
+def test_update_missing_character_returns_404(client):
+    response = client.put(
+        "/characters/999",
+        params={"status": "missing"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_delete_character(client, sample_data):
+    percy = sample_data["percy"]
+
+    response = client.delete(f"/characters/{percy.id}")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Deleted"
+
+    get_response = client.get(f"/characters/{percy.id}")
+
+    assert get_response.status_code == 404
+
+
+def test_delete_missing_character_returns_404(client):
+    response = client.delete("/characters/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
