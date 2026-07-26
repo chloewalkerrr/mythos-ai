@@ -20,15 +20,9 @@ DB_NAME = os.getenv("DB_NAME")
 
 # Build database connection URL
 if DB_PASSWORD:
-    DATABASE_URL = (
-        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}"
-        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 else:
-    DATABASE_URL = (
-        f"mysql+pymysql://{DB_USER}"
-        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    DATABASE_URL = f"mysql+pymysql://{DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # Create engine
 engine = create_engine(DATABASE_URL)
@@ -37,11 +31,7 @@ engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
 # Session factory
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # Database session dependency
