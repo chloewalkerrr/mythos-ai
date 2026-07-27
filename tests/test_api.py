@@ -62,7 +62,7 @@ def test_get_gods_returns_poseidon(client, sample_data):
 def test_create_character(client):
     response = client.post(
         "/characters",
-        params={
+        json={
             "name": "Annabeth Chase",
             "age": 16,
         },
@@ -81,7 +81,7 @@ def test_update_character(client, sample_data):
 
     response = client.put(
         f"/characters/{percy.id}",
-        params={"status": "missing"},
+        json={"status": "missing"},
     )
 
     assert response.status_code == 200
@@ -96,11 +96,22 @@ def test_update_character(client, sample_data):
 def test_update_missing_character_returns_404(client):
     response = client.put(
         "/characters/999",
-        params={"status": "missing"},
+        json={"status": "missing"},
     )
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Not found"
+
+
+def test_update_character_rejects_empty_status(client, sample_data):
+    percy = sample_data["percy"]
+
+    response = client.put(
+        f"/characters/{percy.id}",
+        json={"status": ""},
+    )
+
+    assert response.status_code == 422
 
 
 def test_delete_character(client, sample_data):
@@ -171,3 +182,15 @@ def test_get_character_quests(client, sample_data):
     assert data[0]["character"] == "Percy Jackson"
     assert data[0]["quest"] == "Retrieve Zeus's Master Bolt"
     assert data[0]["book"] == "The Lightning Thief"
+
+
+def test_create_character_rejects_invalid_age(client):
+    response = client.post(
+        "/characters",
+        json={
+            "name": "Test Character",
+            "age": -1,
+        },
+    )
+
+    assert response.status_code == 422
