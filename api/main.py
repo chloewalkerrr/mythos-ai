@@ -15,19 +15,27 @@ from models import get_db
 from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
 from models.character import Character
 from models.god import God
-from schemas.character import CharacterCreate, CharacterUpdate
+from schemas.character import CharacterCreate, CharacterResponse, CharacterUpdate
 
 app = FastAPI(title="Percy Jackson Database")
 
 
 # get all characters
-@app.get("/characters", tags=["Characters"])
+@app.get(
+    "/characters",
+    response_model=list[CharacterResponse],
+    tags=["Characters"],
+)
 def get_characters(db: Session = Depends(get_db)):
     return db.query(Character).all()
 
 
 # get one character
-@app.get("/characters/{id}", tags=["Characters"])
+@app.get(
+    "/characters/{id}",
+    response_model=CharacterResponse,
+    tags=["Characters"],
+)
 def get_character(id: int, db: Session = Depends(get_db)):
     char = db.query(Character).filter(Character.id == id).first()
     if not char:
