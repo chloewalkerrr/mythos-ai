@@ -5,41 +5,24 @@ Chloe Walker - CMSC 4323
 
 import sys
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 sys.path.append("..")
 
 from api.characters import router as characters_router
+from api.gods import router as gods_router
+from api.quests import router as quests_router
 from models import get_db
 from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
 from models.character import Character
-from models.god import God
 
 app = FastAPI(title="Percy Jackson Database")
+
 app.include_router(characters_router)
-
-
-# get all gods
-@app.get("/gods", tags=["Gods"])
-def get_gods(db: Session = Depends(get_db)):
-    return db.query(God).all()
-
-
-# get god's children (join query)
-@app.get("/gods/{id}/children", tags=["Gods"])
-def get_god_children(id: int, db: Session = Depends(get_db)):
-    god = db.query(God).filter(God.id == id).first()
-    if not god:
-        raise HTTPException(status_code=404, detail="Not found")
-    return {"god": god.name, "children": god.children}
-
-
-# get all quests
-@app.get("/quests", tags=["Quests"])
-def get_quests(db: Session = Depends(get_db)):
-    return db.query(Quest).all()
+app.include_router(gods_router)
+app.include_router(quests_router)
 
 
 # character's quests (multiple join)
