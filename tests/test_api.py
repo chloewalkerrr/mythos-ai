@@ -121,3 +121,53 @@ def test_delete_missing_character_returns_404(client):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Not found"
+
+
+def test_get_god_children(client, sample_data):
+    poseidon = sample_data["poseidon"]
+
+    response = client.get(f"/gods/{poseidon.id}/children")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["god"] == "Poseidon"
+    assert len(data["children"]) == 1
+    assert data["children"][0]["name"] == "Percy Jackson"
+
+
+def test_get_missing_god_children_returns_404(client):
+    response = client.get("/gods/999/children")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_get_character_powers(client, sample_data):
+    percy = sample_data["percy"]
+
+    response = client.get(f"/characters/{percy.id}/powers")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["character"] == "Percy Jackson"
+    assert data[0]["power"] == "Hydrokinesis"
+
+
+def test_get_character_quests(client, sample_data):
+    percy = sample_data["percy"]
+
+    response = client.get(f"/characters/{percy.id}/quests")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["character"] == "Percy Jackson"
+    assert data[0]["quest"] == "Retrieve Zeus's Master Bolt"
+    assert data[0]["book"] == "The Lightning Thief"
