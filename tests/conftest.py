@@ -6,6 +6,7 @@ from sqlalchemy.pool import StaticPool
 
 from api.main import app
 from models import Base, get_db
+from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
 from models.character import Character
 from models.god import God
 
@@ -77,7 +78,62 @@ def sample_data(db_session):
     db_session.commit()
     db_session.refresh(percy)
 
+    hydrokinesis = Power(
+        name="Hydrokinesis",
+        description="Control over water",
+        power_type="Elemental",
+        power_level=10,
+    )
+
+    db_session.add(hydrokinesis)
+    db_session.commit()
+    db_session.refresh(hydrokinesis)
+
+    character_power = CharacterPower(
+        character_id=percy.id,
+        power_id=hydrokinesis.id,
+        proficiency_level=10,
+    )
+
+    db_session.add(character_power)
+    db_session.commit()
+
+    book = Book(
+        title="The Lightning Thief",
+        book_number=1,
+        page_count=377,
+    )
+
+    db_session.add(book)
+    db_session.commit()
+    db_session.refresh(book)
+
+    quest = Quest(
+        title="Retrieve Zeus's Master Bolt",
+        description="Recover Zeus's stolen master bolt.",
+        objective="Return the master bolt to Zeus.",
+        status="completed",
+        difficulty_level=8,
+        book_id=book.id,
+    )
+
+    db_session.add(quest)
+    db_session.commit()
+    db_session.refresh(quest)
+
+    participant = QuestParticipant(
+        quest_id=quest.id,
+        character_id=percy.id,
+        role="Leader",
+    )
+
+    db_session.add(participant)
+    db_session.commit()
+
     return {
         "poseidon": poseidon,
         "percy": percy,
+        "hydrokinesis": hydrokinesis,
+        "book": book,
+        "quest": quest,
     }
