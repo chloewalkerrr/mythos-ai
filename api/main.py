@@ -65,5 +65,11 @@ def view_character_summary(db: Session = Depends(get_db)):
 # stored procedure
 @app.get("/procedures/god-children/{god_name}", tags=["Procedures"])
 def procedure_god_children(god_name: str, db: Session = Depends(get_db)):
-    result = db.execute(text(f"CALL GetCharactersByGodParent('{god_name}')")).fetchall()
+    query = text("CALL GetCharactersByGodParent(:god_name)")
+
+    result = db.execute(
+        query,
+        {"god_name": god_name},
+    ).fetchall()
+
     return [dict(row._mapping) for row in result]
