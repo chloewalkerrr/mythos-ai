@@ -11,88 +11,14 @@ from sqlalchemy.orm import Session
 
 sys.path.append("..")
 
+from api.characters import router as characters_router
 from models import get_db
 from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
 from models.character import Character
 from models.god import God
-from schemas.character import CharacterCreate, CharacterResponse, CharacterUpdate
 
 app = FastAPI(title="Percy Jackson Database")
-
-
-# get all characters
-@app.get(
-    "/characters",
-    response_model=list[CharacterResponse],
-    tags=["Characters"],
-)
-def get_characters(db: Session = Depends(get_db)):
-    return db.query(Character).all()
-
-
-# get one character
-@app.get(
-    "/characters/{id}",
-    response_model=CharacterResponse,
-    tags=["Characters"],
-)
-def get_character(id: int, db: Session = Depends(get_db)):
-    char = db.query(Character).filter(Character.id == id).first()
-    if not char:
-        raise HTTPException(status_code=404, detail="Not found")
-    return char
-
-
-# create character
-@app.post("/characters", tags=["Characters"])
-def create_character(character: CharacterCreate, db: Session = Depends(get_db)):
-    new_char = Character(
-        name=character.name,
-        age=character.age,
-    )
-
-    db.add(new_char)
-    db.commit()
-    db.refresh(new_char)
-
-    return {
-        "message": "Created",
-        "character": new_char.name,
-    }
-
-
-# update character
-@app.put("/characters/{id}", tags=["Characters"])
-def update_character(
-    id: int,
-    character: CharacterUpdate,
-    db: Session = Depends(get_db),
-):
-    char = db.query(Character).filter(Character.id == id).first()
-
-    if not char:
-        raise HTTPException(status_code=404, detail="Not found")
-
-    char.status = character.status
-    db.commit()
-    db.refresh(char)
-
-    return {
-        "message": "Updated",
-        "character": char.name,
-        "new_status": char.status,
-    }
-
-
-# delete character
-@app.delete("/characters/{id}", tags=["Characters"])
-def delete_character(id: int, db: Session = Depends(get_db)):
-    char = db.query(Character).filter(Character.id == id).first()
-    if not char:
-        raise HTTPException(status_code=404, detail="Not found")
-    db.delete(char)
-    db.commit()
-    return {"message": "Deleted"}
+app.include_router(characters_router)
 
 
 # get all gods
