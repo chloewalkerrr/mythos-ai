@@ -171,3 +171,73 @@ Fix the fail-fast configuration gap identified in the repository audit: `models/
 - Add the missing fail-fast test (`monkeypatch`-based).
 - Implement `SecretStr` for `db_password`.
 - Continue with the originally-scoped rest of Session 1: `pytest-cov`, `pre-commit`, and establishing the `docs/adr/` folder — treat as "Session 1b."
+---
+
+## 2026-08-08 — PR review and CI debugging: chore/dev-tooling → dev
+
+**Objective:**
+Open a pull request for the accumulated `chore/dev-tooling` work (line-ending/encoding fix,
+`pydantic-settings` implementation, documentation set) against `dev`, get it passing CI, and
+merge it.
+
+**Work completed:**
+- Pushed `chore/dev-tooling` to GitHub and opened a PR against `dev`, with a description
+  summarizing all three prior commits and their verification steps.
+- CI failed on first push with a Ruff linting error (`I001`, import-block sorting): local
+  testing (pytest, manual imports) never runs Ruff, so this had never been checked locally.
+  Fixed via `ruff check --fix`; verified clean with a follow-up `ruff check .`.
+- CI failed again with a *different* Ruff error — the separate `ruff format . --check` step
+  (blank-line spacing), a distinct tool from the linter. Fixed via `ruff format .`.
+- Adopted a new habit at this point: run all three CI steps locally (`ruff check .`,
+  `ruff format . --check`, `python -m pytest`) before every push, rather than pushing and
+  waiting for CI to report issues one at a time.
+- CI failed a third time, differently: `pytest` failed during collection with a
+  `pydantic_core.ValidationError` — `db_user`/`db_name` "required, missing" — because
+  GitHub's CI runner has no `.env` file (correctly never committed, per `.gitignore`), so
+  `Settings()` found no configuration at all when the test suite imported the app.
+- Diagnosed this as expected, correct behavior of the fail-fast validation built earlier
+  this session — not a bug in that code — combined with a real, separate gap: CI had never
+  been given its own configuration. Considered three options (fake `.env` values, making
+  `Settings()` lazy/deferred, or CI-scoped environment variables in `ci.yml`) and chose the
+  third: added `DB_USER`/`DB_NAME` as step-scoped `env:` values on the "Run tests" step.
+- Verified the fix locally with a genuine test (not just a plausible-looking one): renamed
+  `.env` out of the way entirely, set only the two environment variables, and confirmed the
+  full test suite still passed 17/17 with no `.env` file present at all — then restored
+  `.env`.
+- Pushed the fix; CI passed fully (lint, format, tests) for the first time.
+- Merged the PR into `dev` via a merge commit (matching the repository's existing
+  convention), keeping the `chore/dev-tooling` branch (not deleted) at the person's request,
+  since the branch itself is a low-cost, low-risk thing to keep around for later reference.
+- Pulled the merged `dev` locally — fast-forward, all expected files present.
+
+**Engineering decisions:**
+- Treated the third CI failure as a design question, not just a bug to patch. Considered
+  and rejected making `Settings()` lazy (more invasive, more moving parts, no clear
+  additional benefit) in favor of giving CI its own explicit, appropriately-scoped
+  configuration — the same pattern every environment (local `.env`, CI's `env:` block,
+  eventually a real deployment's environment variables) should independently follow. This
+  was initially miscast as a "quick fix" versus "the right fix" tradeoff; on reflection,
+  environment-scoped configuration is the standard, correct pattern, not a shortcut.
+- Chose "Create a merge commit" over squashing when merging the PR, specifically to
+  preserve the individually-readable commit history of the three CI failures and fixes —
+  judged more valuable as a record of a real debugging process than a flattened, cleaner-
+  looking single commit would have been.
+- Kept the merged `chore/dev-tooling` branch rather than deleting it, on request — noted
+  that this doesn't affect the repository's real history (all commits are already part of
+  `dev` regardless of whether the branch label still exists), so the cost of keeping it is
+  purely cosmetic.
+
+**Technical concepts learned:**
+- `ruff check` (linting) and `ruff format --check` (formatting) are separate tools/checks
+  with separate rule sets — passing one says nothing about the other.
+- Why CI runners always start from a fresh checkout of only what's committed to the
+  repository — meaning anything `.gitignore`'d (like `.env`) simply does not exist there,
+  by design.
+- The distinction between a step-scoped `env:` block in a GitHub Actions workflow (applies
+  only to one step) versus job-level or workflow-level environment variables.
+- Why "the test suite requires real database configuration to even import" was itself a
+  design smell, given that `tests/conftest.py` was specifically built to isolate tests from
+  any real database.
+- The genuine difference between a plausible-looking local test (setting env vars while
+  `.env` was still present, which could pass for the wrong reason) and a conclusive one
+  (temporarily removing `.env` entirely to eliminate ambiguity
