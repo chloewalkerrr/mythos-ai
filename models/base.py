@@ -9,7 +9,7 @@ from models.config import settings
 
 # Database configuration
 DB_USER = settings.db_user
-DB_PASSWORD = settings.db_password
+DB_PASSWORD = settings.db_password.get_secret_value()
 DB_HOST = settings.db_host
 DB_PORT = settings.db_port
 DB_NAME = settings.db_name
