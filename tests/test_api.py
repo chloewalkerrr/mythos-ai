@@ -1,3 +1,9 @@
+import pytest
+from pydantic_core import ValidationError
+
+from models.config import Settings
+
+
 def test_openapi_docs_available(client):
     response = client.get("/docs")
 
@@ -194,3 +200,10 @@ def test_create_character_rejects_invalid_age(client):
     )
 
     assert response.status_code == 422
+
+
+def test_settings_require_db_user(monkeypatch):
+    monkeypatch.delenv("DB_USER", raising=False)
+    monkeypatch.delenv("DB_NAME", raising=False)
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
