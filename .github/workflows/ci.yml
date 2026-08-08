@@ -38,5 +38,8 @@ jobs:
           python -m ruff format . --check
 
       - name: Run tests
+        env:
+          DB_USER: test_user
+          DB_NAME: test_db
         run: |
           python -m pytest
