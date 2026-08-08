@@ -50,7 +50,7 @@ Per `DEVELOPMENT_ROADMAP.md` §4, Phase 1's completion criterion is: *a user can
 
 **Milestone: Complete and Consistent Core Data/API Layer.** Full CRUD, typed request/response schemas, and consistent validation across all 13 entities, plus resolution of the two known SQL defects (`sql/procedures.sql`, `sql/views.sql`). This was chosen because it's the one candidate every later phase (frontend, NL-to-SQL, knowledge graph) directly depends on. Full candidate comparison and reasoning: see `ENGINEERING_LOG.md`, 2026-08-06.
 
-**Next session ("Session 1b"):** finish the originally-scoped Session 1 tooling — `pytest-cov`, `pre-commit`, `docs/adr/` — and/or close the two items deferred from today (`SecretStr` for `db_password`, an automated fail-fast validation test). See `ENGINEERING_LOG.md`, 2026-08-08.
+**Next session ("Session 1b"):** finish the originally-scoped Session 1 tooling — `pytest-cov`, `pre-commit`, `docs/adr/` — and/or close the two items deferred from today (`SecretStr` for `db_password`, an automated fail-fast validation test). `chore/dev-tooling` merged into `dev` on 2026-08-08 (PR included three rounds of CI-driven fixes — see `ENGINEERING_LOG.md`, 2026-08-08, "PR review and CI debugging" — worth reading before Session 1b, since it directly motivates adding `pre-commit`).
 
 ## Technology Decision Register
 
