@@ -9,4 +9,5 @@ class Settings(BaseSettings):
     db_host: str = "localhost"
     db_port: str = "3306"
 
+
 settings = Settings()
