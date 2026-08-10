@@ -2,10 +2,18 @@
 Character Model - represents demigods and characters
 """
 
-from sqlalchemy import CheckConstraint, Column, ForeignKey, Index, Integer, String, Text
+import enum
+
+from sqlalchemy import CheckConstraint, Column, Enum, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from models.base import Base
+
+
+class CharacterStatus(enum.Enum):
+    ALIVE = "alive"
+    DECEASED = "deceased"
+    MISSING = "missing"
 
 
 class Character(Base):
@@ -23,7 +31,10 @@ class Character(Base):
     parent_god_id = Column(Integer, ForeignKey("gods.id", ondelete="SET NULL"))
     cabin_id = Column(Integer, ForeignKey("cabins.id", ondelete="SET NULL"))
 
-    status = Column(String(50), default="alive")
+    status = Column(
+        Enum(CharacterStatus, values_callable=lambda x: [e.value for e in x]),
+        default=CharacterStatus.ALIVE,
+    )
     first_appearance = Column(String(100))
 
     # relationships - sqlalchemy handles the joins

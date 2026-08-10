@@ -9,6 +9,7 @@ from sqlalchemy import (
     CheckConstraint,
     Column,
     Date,
+    Enum,
     ForeignKey,
     Index,
     Integer,
@@ -66,7 +67,7 @@ class Monster(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False, unique=True)
     species = Column(String(100))  # e.g., "Minotaur", "Cyclops"
-    threat_level = Column(String(20))  # low, medium, high, extreme
+    threat_level = Column(Enum(MonsterThreatLevel, values_callable=lambda x: [e.value for e in x]))
     description = Column(Text)
     weaknesses = Column(Text)
     abilities = Column(Text)
@@ -74,12 +75,7 @@ class Monster(Base):
     # Relationships
     quest_encounters = relationship("QuestMonster", back_populates="monster")
 
-    __table_args__ = (
-        Index("idx_monster_name", "name"),
-        CheckConstraint(
-            "threat_level IN ('low', 'medium', 'high', 'extreme')", name="check_threat_level"
-        ),
-    )
+    __table_args__ = (Index("idx_monster_name", "name"),)
 
     def __repr__(self):
         return f"<Monster(name='{self.name}', threat_level='{self.threat_level}')>"
@@ -120,7 +116,10 @@ class Quest(Base):
     objective = Column(Text)
     start_date = Column(Date)
     end_date = Column(Date)
-    status = Column(String(20), default="pending")
+    status = Column(
+        Enum(QuestStatus, values_callable=lambda x: [e.value for e in x]),
+        default=QuestStatus.PENDING,
+    )
     difficulty_level = Column(
         Integer, CheckConstraint("difficulty_level >= 1 AND difficulty_level <= 10")
     )
@@ -151,12 +150,7 @@ class Quest(Base):
         "QuestMonster", back_populates="quest", cascade="all, delete-orphan"
     )
 
-    __table_args__ = (
-        Index("idx_quest_status", "status"),
-        CheckConstraint(
-            "status IN ('pending', 'in_progress', 'completed', 'failed')", name="check_quest_status"
-        ),
-    )
+    __table_args__ = ()
 
     def __repr__(self):
         return f"<Quest(id={self.id}, title='{self.title}', status='{self.status}')>"
