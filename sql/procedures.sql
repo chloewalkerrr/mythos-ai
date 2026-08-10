@@ -14,9 +14,10 @@ BEGIN
 END //
 
 -- get quest details
-DROP PROCEDURE IF EXISTS GetQuestDetails(IN quest_id INT)
+DROP PROCEDURE IF EXISTS GetQuestDetails //
+CREATE PROCEDURE GetQuestDetails(IN quest_id INT)
 BEGIN
-    SELECT 
+    SELECT
         q.title,
         q.status,
         q.difficulty_level,
@@ -27,13 +28,14 @@ BEGIN
 END //
 
 -- update character status
-DROP PROCEDURE IF EXISTS UpdateCharacterStatus(
+DROP PROCEDURE IF EXISTS UpdateCharacterStatus //
+CREATE PROCEDURE UpdateCharacterStatus(
     IN char_id INT,
     IN new_status VARCHAR(50)
 )
 BEGIN
-    UPDATE characters 
-    SET status = new_status 
+    UPDATE characters
+    SET status = new_status
     WHERE id = char_id;
 END //
 
