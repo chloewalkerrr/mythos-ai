@@ -241,3 +241,45 @@ merge it.
 - The genuine difference between a plausible-looking local test (setting env vars while
   `.env` was still present, which could pass for the wrong reason) and a conclusive one
   (temporarily removing `.env` entirely to eliminate ambiguity
+
+
+---
+
+## 2026-08-10 — Fixed the broken stored procedures + found the views were out of sync
+
+**Objective:**
+Fix the two broken stored procedures, and decide what to do with the two unused views.
+
+**Work completed:**
+- Fixed `GetQuestDetails` and `UpdateCharacterStatus` in `sql/procedures.sql` — both
+  were missing their `CREATE PROCEDURE` line entirely. Tested all three procedures
+  for real in MySQL Workbench, they all work now.
+- While checking the views, found something bigger: `sql/views.sql` didn't match
+  what's actually in the database at all. The real views in the database are way
+  more developed (more joins, more columns) than what's in the file. Pulled the
+  real definitions straight from the database and rewrote `sql/views.sql` to
+  actually match reality. Added `DROP VIEW IF EXISTS` before each one too, so the
+  file can be safely re-run.
+- Decided to wire up the two unused views as real endpoints instead of deleting
+  them, since they turned out to have genuinely useful data (quest stats, active
+  demigod info). Added `/views/quest-statistics` and `/views/active-demigods` to
+  `api/main.py`, same pattern as the existing view endpoint. Tested both live —
+  both return 200 OK with real data.
+
+**What I learned:**
+- A `.sql` file in the repo isn't automatically trustworthy — it can drift from
+  what's actually running in the database if someone edits the database directly
+  and never updates the file. Worth double-checking instead of assuming.
+- `DROP PROCEDURE`/`DROP VIEW ... IF EXISTS` only take a name, never a parameter
+  list — that's what was broken in the procedures.
+- Leftover environment variables from testing earlier (`DB_USER`/`DB_NAME` set to
+  fake CI values) can silently break local testing later in the same terminal
+  session — had to clear them before the new endpoints would connect properly.
+
+**Still not done:**
+- The live database's `characters` table (and probably `quests`/`monsters` too)
+  still has the *old* schema — no real `ENUM` protection yet, since nothing's
+  re-run the schema against the new models. This is the actual trigger for
+  finally adding Alembic, which was always the plan for "next real schema change."
+
+**Next up:** Alembic (migrations), so the schema drift problem stops happening.

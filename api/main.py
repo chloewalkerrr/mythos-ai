@@ -62,6 +62,18 @@ def view_character_summary(db: Session = Depends(get_db)):
     return [dict(row._mapping) for row in result]
 
 
+@app.get("/views/quest-statistics", tags=["Views"])
+def view_quest_statistics(db: Session = Depends(get_db)):
+    result = db.execute(text("SELECT * FROM quest_statistics")).fetchall()
+    return [dict(row._mapping) for row in result]
+
+
+@app.get("/views/active-demigods", tags=["Views"])
+def view_active_demigods(db: Session = Depends(get_db)):
+    result = db.execute(text("SELECT * FROM active_demigods")).fetchall()
+    return [dict(row._mapping) for row in result]
+
+
 # stored procedure
 @app.get("/procedures/god-children/{god_name}", tags=["Procedures"])
 def procedure_god_children(god_name: str, db: Session = Depends(get_db)):
