@@ -34,6 +34,7 @@ Per `DEVELOPMENT_ROADMAP.md` §4, Phase 1's completion criterion is: *a user can
 - Fixed both broken stored procedures; verified working against real database
 - Found and fixed sql/views.sql drift from the real database; wired up the two
   previously-unused views as new API endpoints
+  - Alembic set up for database migrations; live database schema now matches the models (including the Session 2 enum changes)
 
 **Not yet done:**
 - CRUD for the other 12 entities (only `Character` has full CRUD)
