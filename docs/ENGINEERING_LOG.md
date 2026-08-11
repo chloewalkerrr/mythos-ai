@@ -283,3 +283,54 @@ Fix the two broken stored procedures, and decide what to do with the two unused 
   finally adding Alembic, which was always the plan for "next real schema change."
 
 **Next up:** Alembic (migrations), so the schema drift problem stops happening.
+
+---
+
+## 2026-08-11 — Added Alembic for database migrations
+
+**Objective:**
+Set up Alembic so schema changes can actually be applied to the real database,
+instead of just existing in the Python models. Triggered by last session's
+discovery that the live database was still on the old schema.
+
+**Work completed:**
+- Installed Alembic, ran `alembic init migrations`.
+- Configured it to pull the real database URL from `Settings` at runtime
+  (`models/base.py`'s `DATABASE_URL`) instead of hardcoding it in
+  `alembic.ini` — no real credentials ever get written to that file.
+- Pointed `target_metadata` at `Base.metadata` so Alembic can actually compare
+  the models against the real database.
+- Generated a migration and it immediately caught something we didn't expect:
+  a missing index (`idx_quest_status`) that got accidentally deleted back in
+  the Session 2 status/enum work. Fixed the model, regenerated a clean
+  migration.
+- Reviewed the generated migration by hand before running it, and checked
+  the real data in each affected column first (`SELECT DISTINCT status ...`)
+  to make sure nothing would break converting to an enum.
+- Ran the migration for real. Checked `DESCRIBE characters` afterward —
+  `status` is now a real `enum('alive','deceased','missing')` in the actual
+  database, not just in the Python model.
+- Tested the enum actually blocks bad data: called
+  `UpdateCharacterStatus(1, 'banana')`. It didn't error, but MySQL silently
+  refused to store it — status came back empty instead. Restored Percy's
+  real status afterward.
+
+**What I learned:**
+- Autogenerate isn't magic — it compares models to the real database and
+  tells you the difference, but you still have to read what it generated
+  before trusting it, especially for anything that touches existing data.
+- MySQL's default behavior for an invalid enum value isn't a clean error —
+  it's a silent "data truncated" warning, and it stores an empty value
+  instead. Worth remembering that "no error" doesn't always mean "nothing
+  went wrong."
+- A small mistake from a few sessions ago (deleting the index along with
+  the constraint) only got caught because Alembic compared the model
+  against the real database. Worth remembering as a reason migrations
+  are useful beyond just applying changes -- they double-check your work.
+
+**Still open:**
+- MySQL's default SQL mode allows this kind of silent truncation. Making it
+  strict (so bad enum values actually throw an error) is a possible future
+  improvement, not done today.
+
+**Next up:** Session 4 -- build out `God` as the reference CRUD pattern.

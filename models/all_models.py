@@ -150,7 +150,7 @@ class Quest(Base):
         "QuestMonster", back_populates="quest", cascade="all, delete-orphan"
     )
 
-    __table_args__ = ()
+    __table_args__ = (Index("idx_quest_status", "status"),)
 
     def __repr__(self):
         return f"<Quest(id={self.id}, title='{self.title}', status='{self.status}')>"
