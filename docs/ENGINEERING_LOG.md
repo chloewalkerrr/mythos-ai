@@ -334,3 +334,34 @@ discovery that the live database was still on the old schema.
   improvement, not done today.
 
 **Next up:** Session 4 -- build out `God` as the reference CRUD pattern.
+
+---
+
+## 2026-08-11 — God: full CRUD (the reference pattern)
+
+**Objective:**
+Build God into a full CRUD entity, and use it to settle the pattern every
+other entity (Cabin, Location, Monster, Weapon, Power, Book, Prophecy, and
+eventually Quest) will copy.
+
+**Work completed:**
+- Created `schemas/god.py`: GodCreate, GodUpdate, GodResponse.
+- Rewrote `api/gods.py`: added GET /{id}, POST, PUT, DELETE, kept the
+  existing GET /{id}/children endpoint as-is (it's a join, not standard
+  CRUD). Added response_model to the existing list endpoint too.
+- Made GodUpdate a proper partial-update schema -- every field optional,
+  so a caller can update just one field without resending everything.
+  This is different from CharacterUpdate (which only has one field,
+  status) and is the pattern I'm carrying forward for future entities.
+- Wrote 7 new tests covering the new endpoints, including one that
+  specifically checks a partial update doesn't wipe out untouched fields.
+- Coverage on api/gods.py went from 50% to 100% after adding the tests --
+  the new endpoints existed but weren't actually tested until then.
+
+**Two new patterns worth remembering for next time:**
+- `God(**god.model_dump())` instead of naming every field by hand when
+  creating a row -- scales better once an entity has more than 2-3 fields.
+- `god.model_dump(exclude_unset=True)` + a loop with `setattr()` for
+  updates -- this is what makes partial updates actually work.
+
+**Next up:** apply this same pattern to Cabin and Location.
