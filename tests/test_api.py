@@ -207,3 +207,87 @@ def test_settings_require_db_user(monkeypatch):
     monkeypatch.delenv("DB_NAME", raising=False)
     with pytest.raises(ValidationError):
         Settings(_env_file=None)
+
+
+def test_get_god_by_id(client, sample_data):
+    poseidon = sample_data["poseidon"]
+
+    response = client.get(f"/gods/{poseidon.id}")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["name"] == "Poseidon"
+    assert data["roman_name"] == "Neptune"
+
+
+def test_get_missing_god_returns_404(client):
+    response = client.get("/gods/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_create_god(client):
+    response = client.post(
+        "/gods",
+        json={
+            "name": "Athena",
+            "domain": "Wisdom",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["name"] == "Athena"
+    assert data["domain"] == "Wisdom"
+    assert data["roman_name"] is None
+
+
+def test_update_god(client, sample_data):
+    poseidon = sample_data["poseidon"]
+
+    response = client.put(
+        f"/gods/{poseidon.id}",
+        json={"title": "God of Earthquakes"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["title"] == "God of Earthquakes"
+    assert data["name"] == "Poseidon"
+
+
+def test_update_missing_god_returns_404(client):
+    response = client.put(
+        "/gods/999",
+        json={"title": "Nobody"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_delete_god(client, sample_data):
+    poseidon = sample_data["poseidon"]
+
+    response = client.delete(f"/gods/{poseidon.id}")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Deleted"
+
+    get_response = client.get(f"/gods/{poseidon.id}")
+
+    assert get_response.status_code == 404
+
+
+def test_delete_missing_god_returns_404(client):
+    response = client.delete("/gods/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
