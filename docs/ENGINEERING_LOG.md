@@ -396,3 +396,30 @@ had zero API exposure before this.
   showed the exact missed line, which is what caught it.
 
 **Next up:** apply the same pattern to Monster, Weapon, and Power.
+
+---
+
+## 2026-08-11 — Monster, Weapon, Power, Book, Prophecy: full CRUD
+
+**Objective:**
+Apply the established pattern to five more entities, closing out most of
+the remaining CRUD gap from the original audit. Only Quest and the
+junction tables are left after this.
+
+**Work completed:**
+- Created schemas and full CRUD routers for all five entities, same
+  structure as God/Cabin/Location.
+- Wired all five into `api/main.py`.
+- Added 44 new tests (85 total now). Every one of the five new entities
+  is at 100% coverage.
+- Two genuinely new things this time:
+  - `Monster.threat_level` uses the real `MonsterThreatLevel` enum type
+    directly in the Pydantic schema, so an invalid value gets rejected at
+    the API layer (422) before it ever reaches the database.
+  - `Power.power_level` and `Book.page_count`/`book_number` got Pydantic
+    numeric constraints (`ge`, `le`, `gt`) matching their existing database
+    CheckConstraints, and I wrote tests specifically proving invalid values
+    get rejected -- a new kind of test, not just happy-path/404 like before.
+
+**Next up:** Quest -- most relationships of any entity, saved for last on
+purpose. Expect this one to take longer than these did.

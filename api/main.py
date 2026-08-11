@@ -11,11 +11,16 @@ from sqlalchemy.orm import Session
 
 sys.path.append("..")
 
+from api.books import router as books_router
 from api.cabins import router as cabins_router
 from api.characters import router as characters_router
 from api.gods import router as gods_router
 from api.locations import router as locations_router
+from api.monsters import router as monsters_router
+from api.powers import router as powers_router
+from api.prophecies import router as prophecies_router
 from api.quests import router as quests_router
+from api.weapons import router as weapons_router
 from models import get_db
 from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
 from models.character import Character
@@ -27,6 +32,11 @@ app.include_router(gods_router)
 app.include_router(quests_router)
 app.include_router(cabins_router)
 app.include_router(locations_router)
+app.include_router(books_router)
+app.include_router(monsters_router)
+app.include_router(powers_router)
+app.include_router(prophecies_router)
+app.include_router(weapons_router)
 
 
 # character's quests (multiple join)
