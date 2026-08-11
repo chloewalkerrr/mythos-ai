@@ -1,6 +1,7 @@
 import pytest
 from pydantic_core import ValidationError
 
+from models.all_models import Cabin, Location
 from models.config import Settings
 
 
@@ -288,6 +289,244 @@ def test_delete_god(client, sample_data):
 
 def test_delete_missing_god_returns_404(client):
     response = client.delete("/gods/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_create_cabin(client, sample_data):
+    poseidon = sample_data["poseidon"]
+
+    response = client.post(
+        "/cabins",
+        json={
+            "cabin_number": 3,
+            "patron_god_id": poseidon.id,
+            "color_scheme": "Blue and Green",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["cabin_number"] == 3
+    assert data["patron_god_id"] == poseidon.id
+    assert data["color_scheme"] == "Blue and Green"
+
+
+def test_get_cabin_by_id(client, sample_data, db_session):
+    poseidon = sample_data["poseidon"]
+
+    cabin = Cabin(cabin_number=3, patron_god_id=poseidon.id, color_scheme="Blue")
+
+    db_session.add(cabin)
+    db_session.commit()
+    db_session.refresh(cabin)
+
+    response = client.get(f"/cabins/{cabin.id}")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["cabin_number"] == 3
+    assert data["color_scheme"] == "Blue"
+
+
+def test_get_missing_cabin_returns_404(client):
+    response = client.get("/cabins/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_update_cabin(client, sample_data, db_session):
+    poseidon = sample_data["poseidon"]
+
+    cabin = Cabin(cabin_number=5, patron_god_id=poseidon.id, color_scheme="Red")
+
+    db_session.add(cabin)
+    db_session.commit()
+    db_session.refresh(cabin)
+
+    response = client.put(
+        f"/cabins/{cabin.id}",
+        json={"color_scheme": "Gold"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["color_scheme"] == "Gold"
+    assert data["cabin_number"] == 5
+
+
+def test_update_missing_cabin_returns_404(client):
+    response = client.put(
+        "/cabins/999",
+        json={"color_scheme": "Gold"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_delete_cabin(client, sample_data, db_session):
+    poseidon = sample_data["poseidon"]
+
+    cabin = Cabin(cabin_number=7, patron_god_id=poseidon.id)
+
+    db_session.add(cabin)
+    db_session.commit()
+    db_session.refresh(cabin)
+
+    response = client.delete(f"/cabins/{cabin.id}")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Deleted"
+
+    get_response = client.get(f"/cabins/{cabin.id}")
+
+    assert get_response.status_code == 404
+
+
+def test_delete_missing_cabin_returns_404(client):
+    response = client.delete("/cabins/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_get_cabins_returns_created_cabin(client, sample_data, db_session):
+    poseidon = sample_data["poseidon"]
+
+    cabin = Cabin(cabin_number=9, patron_god_id=poseidon.id)
+
+    db_session.add(cabin)
+    db_session.commit()
+    db_session.refresh(cabin)
+
+    response = client.get("/cabins")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["cabin_number"] == 9
+
+
+def test_get_locations_returns_created_location(client, db_session):
+    location = Location(name="Camp Half-Blood", realm="Mortal")
+
+    db_session.add(location)
+    db_session.commit()
+    db_session.refresh(location)
+
+    response = client.get("/locations")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["name"] == "Camp Half-Blood"
+
+
+def test_get_location_by_id(client, db_session):
+    location = Location(name="Mount Olympus", realm="Olympus")
+
+    db_session.add(location)
+    db_session.commit()
+    db_session.refresh(location)
+
+    response = client.get(f"/locations/{location.id}")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["name"] == "Mount Olympus"
+    assert data["realm"] == "Olympus"
+
+
+def test_get_missing_location_returns_404(client):
+    response = client.get("/locations/999")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_create_location(client):
+    response = client.post(
+        "/locations",
+        json={
+            "name": "Underworld",
+            "location_type": "Divine Realm",
+            "realm": "Underworld",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["name"] == "Underworld"
+    assert data["location_type"] == "Divine Realm"
+    assert data["coordinates"] is None
+
+
+def test_update_location(client, db_session):
+    location = Location(name="Lotus Hotel", realm="Mortal")
+
+    db_session.add(location)
+    db_session.commit()
+    db_session.refresh(location)
+
+    response = client.put(
+        f"/locations/{location.id}",
+        json={"description": "A magical casino"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["description"] == "A magical casino"
+    assert data["name"] == "Lotus Hotel"
+
+
+def test_update_missing_location_returns_404(client):
+    response = client.put(
+        "/locations/999",
+        json={"description": "Nowhere"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Not found"
+
+
+def test_delete_location(client, db_session):
+    location = Location(name="Camp Jupiter", realm="Mortal")
+
+    db_session.add(location)
+    db_session.commit()
+    db_session.refresh(location)
+
+    response = client.delete(f"/locations/{location.id}")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Deleted"
+
+    get_response = client.get(f"/locations/{location.id}")
+
+    assert get_response.status_code == 404
+
+
+def test_delete_missing_location_returns_404(client):
+    response = client.delete("/locations/999")
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Not found"

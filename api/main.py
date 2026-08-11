@@ -11,8 +11,10 @@ from sqlalchemy.orm import Session
 
 sys.path.append("..")
 
+from api.cabins import router as cabins_router
 from api.characters import router as characters_router
 from api.gods import router as gods_router
+from api.locations import router as locations_router
 from api.quests import router as quests_router
 from models import get_db
 from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipant
@@ -23,6 +25,8 @@ app = FastAPI(title="Percy Jackson Database")
 app.include_router(characters_router)
 app.include_router(gods_router)
 app.include_router(quests_router)
+app.include_router(cabins_router)
+app.include_router(locations_router)
 
 
 # character's quests (multiple join)
