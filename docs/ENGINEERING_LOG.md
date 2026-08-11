@@ -365,3 +365,34 @@ eventually Quest) will copy.
   updates -- this is what makes partial updates actually work.
 
 **Next up:** apply this same pattern to Cabin and Location.
+
+---
+
+## 2026-08-11 — Cabin and Location: full CRUD
+
+**Objective:**
+Apply the pattern established with God to two more entities, both of which
+had zero API exposure before this.
+
+**Work completed:**
+- Created `schemas/cabin.py` and `schemas/location.py`, following the same
+  Create/Update/Response structure as God.
+- Created `api/cabins.py` and `api/locations.py` from scratch (neither
+  existed before), full CRUD on both, wired both into `api/main.py`.
+- Wrote 9 new tests for Cabin (including one for the plain list endpoint,
+  which I initially missed and caught via a coverage gap), 8 for Location.
+- Both entities are at 100% test coverage. 41 tests total now, all passing.
+
+**What I learned / practiced:**
+- Cabin has a required foreign key (`patron_god_id`), so its tests need a
+  real god to exist first -- used `sample_data["poseidon"]` for that,
+  rather than adding a Cabin into the shared `sample_data` fixture itself,
+  since nothing else needs one.
+- A class used directly by name inside a test file (like `Cabin(...)`)
+  needs its own import in that file, separate from whatever `conftest.py`
+  imports for its own purposes.
+- Coverage caught a real gap on its own: I wrote tests for get/update/
+  delete but forgot the plain list endpoint for Cabin. The coverage report
+  showed the exact missed line, which is what caught it.
+
+**Next up:** apply the same pattern to Monster, Weapon, and Power.
