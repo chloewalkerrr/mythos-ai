@@ -1,5 +1,6 @@
 import pytest
 from pydantic_core import ValidationError
+from sqlalchemy import text
 
 from models.all_models import Book, Cabin, Location, Monster, Power, Prophecy, Weapon
 from models.config import Settings
@@ -83,12 +84,13 @@ def test_create_character(client):
     assert data["character"] == "Annabeth Chase"
 
 
-def test_update_character(client, sample_data):
+@pytest.mark.parametrize("status", ["alive", "deceased", "missing"])
+def test_update_character(client, sample_data, db_session, status):
     percy = sample_data["percy"]
 
     response = client.put(
         f"/characters/{percy.id}",
-        json={"status": "missing"},
+        json={"status": status},
     )
 
     assert response.status_code == 200
@@ -97,7 +99,17 @@ def test_update_character(client, sample_data):
 
     assert data["message"] == "Updated"
     assert data["character"] == "Percy Jackson"
-    assert data["new_status"] == "missing"
+    assert data["new_status"] == status
+    assert (
+        db_session.execute(
+            text("SELECT status FROM characters WHERE id = :id"), {"id": percy.id}
+        ).scalar_one()
+        == status
+    )
+
+    get_response = client.get(f"/characters/{percy.id}")
+    assert get_response.status_code == 200
+    assert get_response.json()["status"] == status
 
 
 def test_update_missing_character_returns_404(client):
@@ -110,15 +122,32 @@ def test_update_missing_character_returns_404(client):
     assert response.json()["detail"] == "Not found"
 
 
-def test_update_character_rejects_empty_status(client, sample_data):
+@pytest.mark.parametrize("status", ["banana", "ALIVE", "", " alive ", None])
+def test_update_character_rejects_invalid_status(client, sample_data, db_session, status):
     percy = sample_data["percy"]
+    character_id = percy.id
+    before = client.get(f"/characters/{character_id}").json()
 
     response = client.put(
-        f"/characters/{percy.id}",
-        json={"status": ""},
+        f"/characters/{character_id}",
+        json={"status": status},
     )
 
     assert response.status_code == 422
+    assert (
+        db_session.execute(
+            text("SELECT status FROM characters WHERE id = :id"), {"id": character_id}
+        ).scalar_one()
+        == "alive"
+    )
+
+    get_response = client.get(f"/characters/{character_id}")
+    assert get_response.status_code == 200
+    assert get_response.json() == before
+
+    list_response = client.get("/characters")
+    assert list_response.status_code == 200
+    assert list_response.json() == [before]
 
 
 def test_delete_character(client, sample_data):
