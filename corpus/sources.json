@@ -1,0 +1,44 @@
+[
+  {
+    "source_id": "poseidon-domains",
+    "title": "Poseidon: sea, earthquakes, and horses",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Poseidon god record",
+    "text": "Poseidon is the god of the sea, earthquakes, and horses. His Roman name is Neptune, and his symbol is the trident.",
+    "tags": ["Greek mythology", "Poseidon", "Neptune", "sea"]
+  },
+  {
+    "source_id": "athena-wisdom",
+    "title": "Athena: wisdom and battle strategy",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Athena god record",
+    "text": "Athena is the goddess of wisdom and strategic warfare. Her domains include wisdom, battle strategy, and crafts. Her Roman name is Minerva, and her symbol is the owl.",
+    "tags": ["Greek mythology", "Athena", "Minerva", "wisdom"]
+  },
+  {
+    "source_id": "hades-underworld",
+    "title": "Hades: ruler of the underworld",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Hades god and Underworld location records",
+    "text": "Hades is the god of the underworld and the dead. The Underworld is the realm of the dead ruled by Hades. His domains include death and riches, his Roman name is Pluto, and his symbol is the Helm of Darkness.",
+    "tags": ["Greek mythology", "Hades", "Pluto", "Underworld"]
+  },
+  {
+    "source_id": "medusa-gaze",
+    "title": "Medusa and her petrifying gaze",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Medusa monster record",
+    "text": "Medusa is a Gorgon with snake hair and a petrifying gaze. She turns people to stone. The project's monster record lists reflective surfaces among her weaknesses and classifies her threat level as extreme.",
+    "tags": ["Greek mythology", "Medusa", "Gorgon", "monster"]
+  },
+  {
+    "source_id": "percy-water-powers",
+    "title": "Percy Jackson's parentage and water powers",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Percy Jackson, powers, and character-power assignments",
+    "text": "In the project's Percy Jackson setting, Percy is a son of Poseidon. His assigned powers include hydrokinesis, swordsmanship, and communication with horses. Hydrokinesis means control over water and related phenomena. Percy first appears in The Lightning Thief.",
+    "tags": ["Percy Jackson setting", "Percy Jackson", "Poseidon", "hydrokinesis"]
+  },
+  {
+    "source_id": "annabeth-strategy",
+    "title": "Annabeth Chase and strategic thinking",
+    "reference": "MythosAI project notes, summarized from scripts/populate_data.py: Annabeth Chase and Strategic Mind power assignment",
+    "text": "In the project's Percy Jackson setting, Annabeth Chase is a daughter of Athena and an architect and strategist. Her assigned Strategic Mind power describes enhanced tactical and strategic thinking. Annabeth first appears in The Lightning Thief.",
+    "tags": ["Percy Jackson setting", "Annabeth Chase", "Athena", "strategy"]
+  }
+]
