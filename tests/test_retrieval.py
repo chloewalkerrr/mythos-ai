@@ -2,26 +2,38 @@ import json
 
 import pytest
 
-from retrieval import load_corpus, retrieve
+from retrieval import Source, load_corpus, retrieve
 
 
 def write_corpus(tmp_path, records):
+    if isinstance(records, list):
+        records = [
+            {
+                "source_url": "https://rickriordan.com/character/athena-2/",
+                "provenance": "attributed_summary",
+                **record,
+            }
+            for record in records
+        ]
     path = tmp_path / "sources.json"
     path.write_text(json.dumps(records, ensure_ascii=False), encoding="utf-8")
     return path
 
 
-def test_load_starter_corpus_from_another_working_directory(tmp_path, monkeypatch):
+def test_load_attributed_corpus_from_another_working_directory(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     sources = load_corpus()
 
-    assert sources
+    assert len(sources) == 12
     assert len({source.source_id for source in sources}) == len(sources)
-    medusa = next(source for source in sources if source.source_id == "medusa-gaze")
-    assert medusa.title == "Medusa and her petrifying gaze"
-    assert "scripts/populate_data.py" in medusa.reference
-    assert "turns people to stone" in medusa.text
-    assert "Medusa" in medusa.tags
+    athena = next(source for source in sources if source.source_id == "athena-wisdom")
+    assert athena.title == "Athena's domains and daughter"
+    assert "Rick Riordan official website" in athena.reference
+    assert athena.source_url == "https://rickriordan.com/character/athena-2/"
+    assert "wisdom" in athena.text
+    assert "Athena" in athena.tags
+    assert all(source.provenance == "attributed_summary" for source in sources)
+    assert all(source.source_url.startswith("https://rickriordan.com/") for source in sources)
 
 
 def test_load_minimal_utf8_source_without_tags(tmp_path):
@@ -69,8 +81,8 @@ def test_load_rejects_malformed_json(tmp_path):
 @pytest.mark.parametrize(
     ("query", "expected_id"),
     [
-        ("Which monster turns people to stone?", "medusa-gaze"),
-        ("Who is the god of the sea?", "poseidon-domains"),
+        ("Which cabin housed unclaimed campers?", "camp-hermes-guests"),
+        ("Who is the god of the sea?", "poseidon-sea"),
         ("What water powers does Percy Jackson have?", "percy-water-powers"),
     ],
 )
@@ -92,7 +104,7 @@ def test_wisdom_query_ranks_athena_without_poseidon_contamination():
 
     assert results[0].source.source_id == "athena-wisdom"
     assert results[0].score > 0
-    assert "poseidon-domains" not in [result.source.source_id for result in results]
+    assert "poseidon-sea" not in [result.source.source_id for result in results]
 
 
 def test_ordering_is_repeatable():
@@ -114,7 +126,7 @@ def test_equal_scores_use_source_id_regardless_of_file_order(tmp_path):
 
 
 def test_case_and_punctuation_are_normalized():
-    assert retrieve("MEDUSA!!!") == retrieve("medusa")
+    assert retrieve("PERCY!!!") == retrieve("percy")
 
 
 @pytest.mark.parametrize("query", ["", " \n\t ", "?!", "who is the", "spaceshipxyz"])
@@ -138,3 +150,36 @@ def test_empty_corpus_returns_no_results(tmp_path):
     path = write_corpus(tmp_path, [])
     assert load_corpus(path) == []
     assert retrieve("Medusa", corpus_path=path) == []
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "",
+        "not a URL",
+        "javascript:alert(1)",
+        "file:///tmp/source",
+        "ftp://example.com/file",
+        "https://user:pass@example.com/",
+    ],
+)
+def test_source_rejects_invalid_or_unsafe_urls(url):
+    record = load_corpus()[0].model_dump()
+    record["source_url"] = url
+    with pytest.raises(ValueError):
+        Source.model_validate(record)
+
+
+@pytest.mark.parametrize("field", ["source_url", "provenance"])
+def test_source_requires_explicit_attribution(field):
+    record = load_corpus()[0].model_dump()
+    del record[field]
+    with pytest.raises(ValueError):
+        Source.model_validate(record)
+
+
+def test_source_rejects_old_provenance():
+    record = load_corpus()[0].model_dump()
+    record["provenance"] = "development_summary"
+    with pytest.raises(ValueError):
+        Source.model_validate(record)

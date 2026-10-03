@@ -62,9 +62,11 @@ def test_ask_returns_exact_context_sent_to_provider(client, sample_data, fake_pr
         assert passage == {
             **result.source.model_dump(),
             "score": result.score,
-            "provenance": "development_summary",
+            "provenance": "attributed_summary",
         }
-    assert all(p["provenance"] == "development_summary" for p in body["evidence"])
+    assert all(p["provenance"] == "attributed_summary" for p in body["evidence"])
+    assert all(p["source_url"].startswith("https://rickriordan.com/") for p in body["evidence"])
+    assert all("source_url" not in fact for fact in body["facts"])
     assert len(fake_provider) == 1
     call = fake_provider[0]
     assert call["url"] == "http://127.0.0.1:1234/v1/chat/completions"
@@ -76,7 +78,8 @@ def test_ask_returns_exact_context_sent_to_provider(client, sample_data, fake_pr
     assert payload["stream"] is False
     context = json.loads(payload["messages"][1]["content"])
     assert context == {key: body[key] for key in ("question", "facts", "evidence")}
-    assert "NOT authoritative" in payload["messages"][0]["content"]
+    assert "not direct quotations" in payload["messages"][0]["content"]
+    assert "not to database facts" in payload["messages"][0]["content"]
     assert payload["response_format"] == {
         "type": "json_schema",
         "json_schema": {"name": "grounded_answer", "schema": GeneratedAnswer.model_json_schema()},

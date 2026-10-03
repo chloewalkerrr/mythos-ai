@@ -8,9 +8,10 @@ const answer = {
   question: "Who is Athena?", answer: "Athena is the goddess of wisdom.",
   insufficient_context: false,
   facts: [{ entity_type: "god", entity_id: 2, name: "Athena", field: "domain", value: "Wisdom" }],
-  evidence: [{ source_id: "athena-wisdom", title: "Athena", reference: "Project notes",
+  evidence: [{ source_id: "athena-wisdom", title: "Athena", reference: "Rick Riordan — Athena",
+    source_url: "https://rickriordan.com/character/athena-2/",
     text: "Athena is the goddess of wisdom.", tags: ["Athena"], score: 0.6,
-    provenance: "development_summary" }],
+    provenance: "attributed_summary" }],
 };
 
 test("question validation matches word, whitespace, and length constraints", () => {
@@ -85,4 +86,16 @@ test("facts group by entity identity, preserving supplied facts and their order"
   assert.equal(groups[1].name, "Different entity");
   assert.equal(fieldLabel("parent_god"), "Parent god");
   assert.equal(fieldLabel("power:12"), "Power");
+});
+
+test("evidence requires an attributed summary and safe source URL", async () => {
+  for (const source_url of [undefined, "", "not a URL", "javascript:alert(1)",
+    "file:///tmp/source", "ftp://example.com/file", "https://user:pass@example.com/"]) {
+    const data = { ...answer, evidence: [{ ...answer.evidence[0], source_url }] };
+    await assert.rejects(requestAnswer("Athena", async () => ({ ok: true, json: async () => data })),
+      /incomplete/);
+  }
+  const data = { ...answer, evidence: [{ ...answer.evidence[0], provenance: "development_summary" }] };
+  await assert.rejects(requestAnswer("Athena", async () => ({ ok: true, json: async () => data })),
+    /incomplete/);
 });
