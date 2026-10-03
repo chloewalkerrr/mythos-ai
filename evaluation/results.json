@@ -1,0 +1,1000 @@
+{
+  "scope": "Deterministic retrieval and DB-context checks; no generated answers evaluated.",
+  "fixture": "In-memory SQLite subset of demo data: 2 gods, 2 characters, 2 powers.",
+  "limitations": [
+    "These 18 hand-authored cases are a small regression set, not a general accuracy estimate.",
+    "Related context can exist for an unsupported question; model refusal is not tested here.",
+    "Empty-context checks verify the gate condition; API behavior is covered by mocked tests.",
+    "Database facts are project data and are not certified by the attributed evidence."
+  ],
+  "corpus_sha256": "c1e62c126503b5e697d680060280bccba04c5717ffed03902bf0ea56b85eb0f0",
+  "cases_sha256": "d8499dd1b71a9d7c1d2fc7756f70a63b5e17d79ba22d6229f27d4db1e266461d",
+  "summary": {
+    "expected_evidence_in_top3": {
+      "passed": 13,
+      "checked": 14
+    },
+    "exact_entities": {
+      "passed": 18,
+      "checked": 18
+    },
+    "expected_facts": {
+      "passed": 6,
+      "checked": 6
+    },
+    "empty_context_gate": {
+      "passed": 17,
+      "checked": 18
+    }
+  },
+  "cases_passed": 17,
+  "cases_checked": 18,
+  "cases": [
+    {
+      "id": "01",
+      "category": "direct",
+      "question": "Who are Percy Jackson's parents?",
+      "expected_source_ids": [
+        "percy-parentage"
+      ],
+      "expected_entities": [
+        "Percy Jackson"
+      ],
+      "expected_facts": [
+        {
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-parentage",
+        "percy-roles",
+        "poseidon-sea"
+      ],
+      "selected_entities": [
+        "Percy Jackson"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "name",
+          "value": "Percy Jackson"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "description",
+          "value": "Son of Poseidon, main protagonist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "power:1",
+          "value": "Hydrokinesis: Control over water and related phenomena"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "02",
+      "category": "direct",
+      "question": "Who is Annabeth Chase's mother?",
+      "expected_source_ids": [
+        "annabeth-family"
+      ],
+      "expected_entities": [
+        "Annabeth Chase"
+      ],
+      "expected_facts": [
+        {
+          "name": "Annabeth Chase",
+          "field": "parent_god",
+          "value": "Athena"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "annabeth-family",
+        "annabeth-strategy",
+        "athena-wisdom"
+      ],
+      "selected_entities": [
+        "Annabeth Chase"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "name",
+          "value": "Annabeth Chase"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "description",
+          "value": "Daughter of Athena, architect and strategist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "parent_god",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "power:2",
+          "value": "Strategic Mind: Enhanced tactical and strategic thinking"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "03",
+      "category": "direct",
+      "question": "What is Athena associated with?",
+      "expected_source_ids": [
+        "athena-wisdom"
+      ],
+      "expected_entities": [
+        "Athena"
+      ],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "athena-wisdom",
+        "annabeth-strategy",
+        "annabeth-family"
+      ],
+      "selected_entities": [
+        "Athena"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "name",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "description",
+          "value": "Goddess of wisdom and strategic warfare"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "roman_name",
+          "value": "Minerva"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "title",
+          "value": "Goddess of Wisdom"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "domain",
+          "value": "Wisdom, Battle Strategy, Crafts"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "symbol",
+          "value": "Owl"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "04",
+      "category": "direct",
+      "question": "What can Percy Jackson do with water?",
+      "expected_source_ids": [
+        "percy-water-powers"
+      ],
+      "expected_entities": [
+        "Percy Jackson"
+      ],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-water-powers",
+        "percy-parentage",
+        "percy-roles"
+      ],
+      "selected_entities": [
+        "Percy Jackson"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "name",
+          "value": "Percy Jackson"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "description",
+          "value": "Son of Poseidon, main protagonist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "power:1",
+          "value": "Hydrokinesis: Control over water and related phenomena"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "05",
+      "category": "direct",
+      "question": "Why is Hera's cabin empty?",
+      "expected_source_ids": [
+        "camp-hera-tribute"
+      ],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "camp-hera-tribute",
+        "annabeth-strategy",
+        "camp-hermes-guests"
+      ],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "06",
+      "category": "direct",
+      "question": "What is stolen in The Lightning Thief?",
+      "expected_source_ids": [
+        "lightning-thief-quest"
+      ],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "lightning-thief-quest"
+      ],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "07",
+      "category": "paraphrase",
+      "question": "Which goddess is Annabeth Chase descended from?",
+      "expected_source_ids": [
+        "annabeth-family"
+      ],
+      "expected_entities": [
+        "Annabeth Chase"
+      ],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "annabeth-family",
+        "annabeth-strategy",
+        "athena-wisdom"
+      ],
+      "selected_entities": [
+        "Annabeth Chase"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "name",
+          "value": "Annabeth Chase"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "description",
+          "value": "Daughter of Athena, architect and strategist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "parent_god",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "power:2",
+          "value": "Strategic Mind: Enhanced tactical and strategic thinking"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "08",
+      "category": "paraphrase",
+      "question": "Which hero can stay submerged without needing air?",
+      "expected_source_ids": [
+        "percy-water-powers"
+      ],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [
+        "percy-water-powers"
+      ],
+      "missing_facts": [],
+      "automatic_insufficient_context": true,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": false,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": false
+      },
+      "passed": false
+    },
+    {
+      "id": "09",
+      "category": "paraphrase",
+      "question": "Where did youngsters without a claimed divine parent stay?",
+      "expected_source_ids": [
+        "camp-hermes-guests"
+      ],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "camp-hermes-guests"
+      ],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "10",
+      "category": "paraphrase",
+      "question": "Who narrates the Olympians books?",
+      "expected_source_ids": [
+        "percy-roles"
+      ],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-roles",
+        "annabeth-family"
+      ],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "11",
+      "category": "complementary",
+      "question": "Tell me about Percy Jackson's parent and his water abilities.",
+      "expected_source_ids": [
+        "percy-parentage",
+        "percy-water-powers"
+      ],
+      "expected_entities": [
+        "Percy Jackson"
+      ],
+      "expected_facts": [
+        {
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        },
+        {
+          "name": "Percy Jackson",
+          "field": "power:1",
+          "value": "Hydrokinesis: Control over water and related phenomena"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-water-powers",
+        "percy-parentage",
+        "percy-roles"
+      ],
+      "selected_entities": [
+        "Percy Jackson"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "name",
+          "value": "Percy Jackson"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "description",
+          "value": "Son of Poseidon, main protagonist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "power:1",
+          "value": "Hydrokinesis: Control over water and related phenomena"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "12",
+      "category": "complementary",
+      "question": "What are Annabeth Chase's parentage and role at Camp Half-Blood?",
+      "expected_source_ids": [
+        "annabeth-family",
+        "annabeth-strategy"
+      ],
+      "expected_entities": [
+        "Annabeth Chase"
+      ],
+      "expected_facts": [
+        {
+          "name": "Annabeth Chase",
+          "field": "parent_god",
+          "value": "Athena"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "annabeth-strategy",
+        "annabeth-family",
+        "athena-wisdom"
+      ],
+      "selected_entities": [
+        "Annabeth Chase"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "name",
+          "value": "Annabeth Chase"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "description",
+          "value": "Daughter of Athena, architect and strategist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "parent_god",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 2,
+          "name": "Annabeth Chase",
+          "field": "power:2",
+          "value": "Strategic Mind: Enhanced tactical and strategic thinking"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "13",
+      "category": "complementary",
+      "question": "What is Poseidon's Roman name, and who is his demigod son?",
+      "expected_source_ids": [
+        "poseidon-sea"
+      ],
+      "expected_entities": [
+        "Poseidon"
+      ],
+      "expected_facts": [
+        {
+          "name": "Poseidon",
+          "field": "roman_name",
+          "value": "Neptune"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-parentage",
+        "poseidon-sea",
+        "percy-water-powers"
+      ],
+      "selected_entities": [
+        "Poseidon"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "name",
+          "value": "Poseidon"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "description",
+          "value": "God of the sea, earthquakes, and horses"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "roman_name",
+          "value": "Neptune"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "title",
+          "value": "God of the Sea"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "domain",
+          "value": "Sea, Earthquakes, Horses"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 2,
+          "name": "Poseidon",
+          "field": "symbol",
+          "value": "Trident"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "14",
+      "category": "complementary",
+      "question": "What are Athena's symbol and domains?",
+      "expected_source_ids": [
+        "athena-wisdom"
+      ],
+      "expected_entities": [
+        "Athena"
+      ],
+      "expected_facts": [
+        {
+          "name": "Athena",
+          "field": "symbol",
+          "value": "Owl"
+        },
+        {
+          "name": "Athena",
+          "field": "domain",
+          "value": "Wisdom, Battle Strategy, Crafts"
+        }
+      ],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "athena-wisdom",
+        "annabeth-strategy",
+        "annabeth-family"
+      ],
+      "selected_entities": [
+        "Athena"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "name",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "description",
+          "value": "Goddess of wisdom and strategic warfare"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "roman_name",
+          "value": "Minerva"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "title",
+          "value": "Goddess of Wisdom"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "domain",
+          "value": "Wisdom, Battle Strategy, Crafts"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "symbol",
+          "value": "Owl"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": true,
+        "exact_entities": true,
+        "expected_facts": true,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "15",
+      "category": "unsupported_no_context",
+      "question": "Explain quarks.",
+      "expected_source_ids": [],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": true,
+      "retrieved_source_ids": [],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": true,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": null,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "16",
+      "category": "unsupported_no_context",
+      "question": "How does photosynthesis work?",
+      "expected_source_ids": [],
+      "expected_entities": [],
+      "expected_facts": [],
+      "expected_auto_insufficient": true,
+      "retrieved_source_ids": [],
+      "selected_entities": [],
+      "selected_facts": [],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": true,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": null,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "17",
+      "category": "unsupported_related",
+      "question": "What is Percy Jackson's favorite breakfast?",
+      "expected_source_ids": [],
+      "expected_entities": [
+        "Percy Jackson"
+      ],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "percy-parentage",
+        "percy-roles",
+        "poseidon-sea"
+      ],
+      "selected_entities": [
+        "Percy Jackson"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "name",
+          "value": "Percy Jackson"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "description",
+          "value": "Son of Poseidon, main protagonist"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "parent_god",
+          "value": "Poseidon"
+        },
+        {
+          "entity_type": "character",
+          "entity_id": 1,
+          "name": "Percy Jackson",
+          "field": "power:1",
+          "value": "Hydrokinesis: Control over water and related phenomena"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": null,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    },
+    {
+      "id": "18",
+      "category": "unsupported_related",
+      "question": "What is Athena's email address?",
+      "expected_source_ids": [],
+      "expected_entities": [
+        "Athena"
+      ],
+      "expected_facts": [],
+      "expected_auto_insufficient": false,
+      "retrieved_source_ids": [
+        "annabeth-strategy",
+        "athena-wisdom",
+        "annabeth-family"
+      ],
+      "selected_entities": [
+        "Athena"
+      ],
+      "selected_facts": [
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "name",
+          "value": "Athena"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "description",
+          "value": "Goddess of wisdom and strategic warfare"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "roman_name",
+          "value": "Minerva"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "title",
+          "value": "Goddess of Wisdom"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "domain",
+          "value": "Wisdom, Battle Strategy, Crafts"
+        },
+        {
+          "entity_type": "god",
+          "entity_id": 4,
+          "name": "Athena",
+          "field": "symbol",
+          "value": "Owl"
+        }
+      ],
+      "missing_source_ids": [],
+      "missing_facts": [],
+      "automatic_insufficient_context": false,
+      "model_answerability": "not_evaluated",
+      "checks": {
+        "expected_evidence_in_top3": null,
+        "exact_entities": true,
+        "expected_facts": null,
+        "empty_context_gate": true
+      },
+      "passed": true
+    }
+  ]
+}

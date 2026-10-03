@@ -30,7 +30,6 @@ class Fact(BaseModel):
 
 class Evidence(Source):
     score: float
-    provenance: Literal["development_summary"] = "development_summary"
 
 
 class GeneratedAnswer(BaseModel):

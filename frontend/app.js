@@ -25,6 +25,16 @@ export function groupFacts(facts) {
   return [...groups.values()];
 }
 
+function validSourceUrl(value) {
+  if (typeof value !== "string") return false;
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
 function validAnswer(data) {
   const strings = (item, keys) => item && keys.every((key) => typeof item[key] === "string");
   return strings(data, ["question", "answer"]) && data.answer.trim() &&
@@ -34,7 +44,8 @@ function validAnswer(data) {
       ["character", "god"].includes(fact.entity_type) && Number.isInteger(fact.entity_id)) &&
     Array.isArray(data.evidence) && data.evidence.every((item) =>
       strings(item, ["source_id", "title", "reference", "text"]) &&
-      item.provenance === "development_summary" && Array.isArray(item.tags) &&
+      item.provenance === "attributed_summary" && validSourceUrl(item.source_url) &&
+      Array.isArray(item.tags) &&
       item.tags.every((tag) => typeof tag === "string") && Number.isFinite(item.score));
 }
 
@@ -119,8 +130,12 @@ export function initializeAsk(doc = document) {
       const title = element("h4", "evidence-title");
       title.append(element("span", "reference-number", `[${String(index + 1).padStart(2, "0")}]`));
       title.append(doc.createTextNode(passage.title));
+      const reference = element("p", "source-reference");
+      const link = element("a", "", passage.reference);
+      link.href = passage.source_url;
+      reference.append(link);
       item.append(title, element("p", "evidence-text", passage.text),
-        element("p", "source-reference", passage.reference),
+        reference,
         element("p", "source-id", `Source: ${passage.source_id}`));
       evidence.append(item);
     });

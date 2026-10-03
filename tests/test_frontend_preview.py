@@ -26,3 +26,9 @@ def test_preview_states(state, status, insufficient):
     assert response.status_code == status
     if insufficient is not None:
         assert response.json()["insufficient_context"] is insufficient
+    if state == "success":
+        assert response.json()["answer"].startswith("MOCK PREVIEW:")
+        evidence = response.json()["evidence"][0]
+        assert evidence["provenance"] == "attributed_summary"
+        assert evidence["source_url"] == "https://rickriordan.com/character/percy-jackson/"
+        assert evidence["reference"].startswith("Mock preview")

@@ -5,8 +5,9 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, TypeAdapter, field_validator
 
 DEFAULT_CORPUS_PATH = Path(__file__).resolve().parent / "corpus" / "sources.json"
 STOP_WORDS = frozenset(
@@ -23,8 +24,19 @@ class Source(BaseModel):
     source_id: str = Field(min_length=1)
     title: str = Field(min_length=1)
     reference: str = Field(min_length=1)
+    source_url: str
+    provenance: Literal["attributed_summary"]
     text: str = Field(min_length=1)
     tags: list[str] = Field(default_factory=list)
+
+    @field_validator("source_url")
+    @classmethod
+    def require_source_url(cls, value: str) -> str:
+        url = HttpUrl(value)
+        if url.username or url.password:
+            raise ValueError("Source URLs must not contain credentials")
+        # Keep URLs JSON-native throughout the existing context and HTTP boundary.
+        return str(url)
 
 
 @dataclass(frozen=True)

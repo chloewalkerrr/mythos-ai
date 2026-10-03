@@ -56,7 +56,9 @@ def mock_answer(question: str, insufficient: bool) -> AskResponse:
             Evidence(
                 source_id="mock-percy",
                 title="Percy Jackson (mock passage)",
-                reference="Mock preview data, not from the corpus",
+                reference="Mock preview — Rick Riordan, Percy Jackson character profile",
+                source_url="https://rickriordan.com/character/percy-jackson/",
+                provenance="attributed_summary",
                 text="Percy Jackson is a demigod son of Poseidon.",
                 tags=["mock"],
                 score=0.5,

@@ -80,6 +80,8 @@ dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .evidence-text { margin-top: 10px; max-width: 70ch; font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .source-reference, .source-id { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
 .source-reference { margin-top: 12px; }
+.source-reference a { color: inherit; text-underline-offset: 3px; }
+.source-reference a:hover { color: var(--accent); }
 .source-id { margin-top: 4px; }
 .empty-note { color: var(--muted); font-size: 14px; }
 .site-footer { padding-block: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
