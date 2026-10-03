@@ -4,8 +4,11 @@ Chloe Walker - CMSC 4323
 """
 
 import sys
+from pathlib import Path
 
 from fastapi import Depends, FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -27,6 +30,14 @@ from models.all_models import Book, CharacterPower, Power, Quest, QuestParticipa
 from models.character import Character
 
 app = FastAPI(title="Percy Jackson Database")
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+app.mount("/assets", StaticFiles(directory=FRONTEND_DIR), name="assets")
+
+
+@app.get("/", include_in_schema=False)
+def ask_page():
+    return FileResponse(FRONTEND_DIR / "index.html")
+
 
 app.include_router(answers_router)
 app.include_router(characters_router)

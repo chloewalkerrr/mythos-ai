@@ -43,3 +43,12 @@ jobs:
           DB_NAME: test_db
         run: |
           python -m pytest
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run frontend tests
+        run: |
+          node --test tests/frontend/app.test.mjs
