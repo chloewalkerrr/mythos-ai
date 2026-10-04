@@ -1,5 +1,7 @@
 # MythosAI — Roadmap
 
+> **Historical planning document.** This preserves earlier ideas, including systems intentionally not implemented in the finished MVP; its status lists are not current. See the [main README](../README.md) and [current architecture](ARCHITECTURE.md) for what was built.
+
 **Last updated:** 2026-08-08
 
 ## Purpose of this document
