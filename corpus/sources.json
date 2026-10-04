@@ -1,0 +1,174 @@
+[
+  {
+    "source_id": "percy-parentage",
+    "title": "Percy Jackson's parents",
+    "reference": "Rick Riordan official website — Percy Jackson character profile",
+    "source_url": "https://rickriordan.com/character/percy-jackson/",
+    "provenance": "attributed_summary",
+    "text": "Percy Jackson is a Greek demigod. His parents are Poseidon and Sally Jackson.",
+    "tags": [
+      "Percy Jackson",
+      "Poseidon",
+      "Sally Jackson",
+      "parentage"
+    ]
+  },
+  {
+    "source_id": "percy-roles",
+    "title": "Percy Jackson's roles at camp and in the series",
+    "reference": "Rick Riordan official website — Percy Jackson character profile",
+    "source_url": "https://rickriordan.com/character/percy-jackson/",
+    "provenance": "attributed_summary",
+    "text": "Percy narrates Percy Jackson and the Olympians. He leads Poseidon's cabin and previously served as a praetor of Camp Jupiter's Twelfth Legion.",
+    "tags": [
+      "Percy Jackson",
+      "Camp Jupiter",
+      "Poseidon",
+      "series"
+    ]
+  },
+  {
+    "source_id": "annabeth-family",
+    "title": "Annabeth Chase's family and relationship",
+    "reference": "Rick Riordan official website — Annabeth Chase character profile",
+    "source_url": "https://rickriordan.com/character/annabeth-chase/",
+    "provenance": "attributed_summary",
+    "text": "Annabeth Chase is Athena's demigod daughter and Percy Jackson's girlfriend. She is a central character in both Percy Jackson and the Olympians and The Heroes of Olympus.",
+    "tags": [
+      "Annabeth Chase",
+      "Athena",
+      "Percy Jackson",
+      "parentage",
+      "relationship"
+    ]
+  },
+  {
+    "source_id": "poseidon-sea",
+    "title": "Poseidon, sea god and Percy's father",
+    "reference": "Rick Riordan official website — Poseidon character profile",
+    "source_url": "https://rickriordan.com/character/poseidon-2/",
+    "provenance": "attributed_summary",
+    "text": "Poseidon is the deity of the sea and the father of Percy Jackson.",
+    "tags": [
+      "Poseidon",
+      "Percy Jackson",
+      "sea",
+      "parentage"
+    ]
+  },
+  {
+    "source_id": "athena-wisdom",
+    "title": "Athena's domains and daughter",
+    "reference": "Rick Riordan official website — Athena character profile",
+    "source_url": "https://rickriordan.com/character/athena-2/",
+    "provenance": "attributed_summary",
+    "text": "Athena is associated with wisdom, warfare, and practical arts. Annabeth Chase is her daughter.",
+    "tags": [
+      "Athena",
+      "Annabeth Chase",
+      "wisdom",
+      "war",
+      "arts"
+    ]
+  },
+  {
+    "source_id": "percy-water-powers",
+    "title": "Percy's water abilities",
+    "reference": "Rick Riordan official website — Camp Half Blood Cabins, Poseidon section",
+    "source_url": "https://rickriordan.com/extra/camp-half-blood-cabins/",
+    "provenance": "attributed_summary",
+    "text": "The Poseidon cabin description identifies Percy Jackson as able to breathe beneath water and, at times, control it.",
+    "tags": [
+      "Percy Jackson",
+      "Poseidon",
+      "water",
+      "powers"
+    ]
+  },
+  {
+    "source_id": "annabeth-strategy",
+    "title": "Annabeth and Athena's cabin",
+    "reference": "Rick Riordan official website — Camp Half Blood Cabins, Athena section",
+    "source_url": "https://rickriordan.com/extra/camp-half-blood-cabins/",
+    "provenance": "attributed_summary",
+    "text": "Annabeth Chase leads Cabin Six at Camp Half-Blood. Athena's children are valued for their planning and advice.",
+    "tags": [
+      "Annabeth Chase",
+      "Athena",
+      "Camp Half-Blood",
+      "strategy"
+    ]
+  },
+  {
+    "source_id": "camp-hermes-guests",
+    "title": "Hermes cabin and unclaimed campers",
+    "reference": "Rick Riordan official website — Camp Half Blood Cabins, Hermes section",
+    "source_url": "https://rickriordan.com/extra/camp-half-blood-cabins/",
+    "provenance": "attributed_summary",
+    "text": "The Hermes cabin formerly housed campers whose divine parents had not claimed them. Hermes welcomes guests as the god of travelers.",
+    "tags": [
+      "Hermes",
+      "Camp Half-Blood",
+      "cabins",
+      "unclaimed"
+    ]
+  },
+  {
+    "source_id": "camp-hera-tribute",
+    "title": "Hera's unoccupied cabin",
+    "reference": "Rick Riordan official website — Camp Half Blood Cabins, Hera section",
+    "source_url": "https://rickriordan.com/extra/camp-half-blood-cabins/",
+    "provenance": "attributed_summary",
+    "text": "Hera's cabin at Camp Half-Blood honors her but has no occupants. The resource explains that she has children only with Zeus.",
+    "tags": [
+      "Hera",
+      "Zeus",
+      "Camp Half-Blood",
+      "cabins"
+    ]
+  },
+  {
+    "source_id": "lightning-thief-quest",
+    "title": "The Lightning Thief: the stolen bolt",
+    "reference": "Rick Riordan official website — Percy Jackson and the Olympians, The Lightning Thief synopsis",
+    "source_url": "https://rickriordan.com/series/percy-jackson-and-the-olympians/",
+    "provenance": "attributed_summary",
+    "text": "In The Lightning Thief, twelve-year-old Percy travels across the United States to find the thief of Zeus's master bolt. A satyr and Athena's daughter accompany him.",
+    "tags": [
+      "Percy Jackson",
+      "Zeus",
+      "The Lightning Thief",
+      "quest"
+    ]
+  },
+  {
+    "source_id": "sea-monsters-camp",
+    "title": "The Sea of Monsters: saving the camp",
+    "reference": "Rick Riordan official website — Percy Jackson and the Olympians, The Sea of Monsters synopsis",
+    "source_url": "https://rickriordan.com/series/percy-jackson-and-the-olympians/",
+    "provenance": "attributed_summary",
+    "text": "Poisoning of Thalia's tree weakens Camp Half-Blood's magical defenses in The Sea of Monsters. Percy and his friends sail to find an item that can save the camp; Percy also needs to rescue Grover.",
+    "tags": [
+      "Percy Jackson",
+      "Grover",
+      "Thalia",
+      "Camp Half-Blood",
+      "The Sea of Monsters"
+    ]
+  },
+  {
+    "source_id": "labyrinth-invasion",
+    "title": "The Battle of the Labyrinth: protecting Camp Half-Blood",
+    "reference": "Rick Riordan official website — Percy Jackson and the Olympians, The Battle of the Labyrinth synopsis",
+    "source_url": "https://rickriordan.com/series/percy-jackson-and-the-olympians/",
+    "provenance": "attributed_summary",
+    "text": "In The Battle of the Labyrinth, Kronos's forces threaten to invade Camp Half-Blood. Percy and his friends enter the underground Labyrinth in an attempt to stop them.",
+    "tags": [
+      "Percy Jackson",
+      "Kronos",
+      "Camp Half-Blood",
+      "The Battle of the Labyrinth",
+      "quest"
+    ]
+  }
+]

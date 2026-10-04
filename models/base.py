@@ -2,33 +2,23 @@
 Database connection setup
 """
 
-import os
-
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Load environment variables from .env
-load_dotenv()
+from models.config import settings
 
 # Database configuration
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "3306")
-DB_NAME = os.getenv("DB_NAME")
+DB_USER = settings.db_user
+DB_PASSWORD = settings.db_password.get_secret_value()
+DB_HOST = settings.db_host
+DB_PORT = settings.db_port
+DB_NAME = settings.db_name
 
 # Build database connection URL
 if DB_PASSWORD:
-    DATABASE_URL = (
-        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}"
-        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 else:
-    DATABASE_URL = (
-        f"mysql+pymysql://{DB_USER}"
-        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    DATABASE_URL = f"mysql+pymysql://{DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # Create engine
 engine = create_engine(DATABASE_URL)
@@ -37,11 +27,7 @@ engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
 # Session factory
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # Database session dependency

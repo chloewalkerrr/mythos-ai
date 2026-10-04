@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Explore mythology through grounded answers, database facts, and inspectable project evidence.">
+    <title>MythosAI — Ask &amp; examine</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script type="module" src="/assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to question</a>
+    <header class="site-header">
+      <span class="wordmark">Mythos<span>AI</span></span>
+      <span class="site-description">An evidence-grounded explorer</span>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <div class="introduction" id="introduction">
+        <h1>Mythology, grounded.</h1>
+        <p>Ask about mythology and the Percy Jackson setting.<br class="desktop-break"> Examine the facts and passages behind each answer.</p>
+      </div>
+
+      <form id="ask-form" novalidate>
+        <label for="question">Your question</label>
+        <div class="question-control">
+          <textarea id="question" name="question" rows="2" maxlength="2000" required
+            aria-describedby="question-help" placeholder="What powers does Percy Jackson have?"></textarea>
+          <button class="ask-button" type="submit" id="ask-button">Ask</button>
+        </div>
+        <p class="input-help" id="question-help">Ask one question at a time. Up to 2,000 characters.</p>
+        <p class="form-error" id="form-error" hidden></p>
+      </form>
+
+      <div class="examples" id="examples">
+        <span>Try a question</span>
+        <button type="button">Who is Athena?</button>
+        <button type="button">Who is Percy Jackson’s parent?</button>
+      </div>
+
+      <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></div>
+      <section class="error-message" id="error" aria-labelledby="error-title" hidden>
+        <h2 id="error-title" tabindex="-1">We couldn’t complete your request.</h2>
+        <p id="error-detail"></p>
+      </section>
+
+      <article class="result" id="result" aria-labelledby="result-question" hidden>
+        <h2 id="result-question" tabindex="-1"></h2>
+        <section class="result-section" aria-labelledby="answer-heading">
+          <h3 id="answer-heading">Answer</h3>
+          <div>
+            <p class="context-note" id="context-note" hidden>Insufficient context</p>
+            <p class="answer-text" id="answer-text"></p>
+            <p class="context-help" id="context-help" hidden>Try naming a specific character, god, or relationship from the project.</p>
+          </div>
+        </section>
+        <section class="result-section" aria-labelledby="facts-heading">
+          <h3 id="facts-heading">Facts</h3>
+          <div id="facts"></div>
+        </section>
+        <section class="result-section" aria-labelledby="evidence-heading">
+          <h3 id="evidence-heading">Evidence</h3>
+          <div>
+            <p class="provenance">Project-authored factual summaries attributed to the listed sources; not direct quotations. Database facts are listed separately above.</p>
+            <ol class="evidence-list" id="evidence"></ol>
+            <p id="no-evidence" class="empty-note" hidden>No matching evidence passages were found.</p>
+          </div>
+        </section>
+      </article>
+      <noscript><p class="error-message">Enable JavaScript to submit a question and view its supporting evidence.</p></noscript>
+    </main>
+
+    <footer class="site-footer">Answers are limited to the available project facts and evidence.</footer>
+  </body>
+</html>

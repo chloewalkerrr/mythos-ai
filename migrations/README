@@ -1,0 +1,26 @@
+Generic single-database configuration.
+
+## MythosAI-specific notes
+
+- The database URL is NOT read from alembic.ini. It's loaded dynamically
+  from models.config.settings (via models.base.DATABASE_URL) inside env.py,
+  so real credentials never need to be hardcoded or committed here.
+- target_metadata in env.py is set from models.base.Base.metadata. All
+  model files (models/character.py, models/god.py, models/all_models.py)
+  are imported directly in env.py, even though nothing in that file
+  references them by name -- the import itself is what registers each
+  table onto Base.metadata so Alembic can see it. Those imports are
+  marked `# noqa: F401` for that reason.
+
+## Common commands
+
+- Generate a new migration after changing a model:
+    alembic revision --autogenerate -m "short description"
+- Always review the generated file in migrations/versions/ before running it.
+  Autogenerate is a starting point, not a guarantee -- check that it's not
+  detecting unrelated changes, and that data-affecting changes (like a
+  column type change) are safe given what's actually in the database.
+- Apply pending migrations:
+    alembic upgrade head
+- Roll back the most recent migration:
+    alembic downgrade -1
