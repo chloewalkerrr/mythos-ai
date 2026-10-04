@@ -40,7 +40,9 @@ With XAMPP MariaDB running and the existing `.env` available:
 .\venv\Scripts\python.exe -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000/docs`. Stop the API with Ctrl+C.
+Open `http://127.0.0.1:8000/` for the Ask UI or
+`http://127.0.0.1:8000/docs` for the API documentation. Ask requests with
+matching context also require the LM Studio setup below. Stop the API with Ctrl+C.
 `API_HOST` and `API_PORT` in `.env` are not consumed by the application;
 the Uvicorn arguments above select its address.
 
@@ -85,7 +87,7 @@ Views and procedures require the separate SQL commands. Neither table
 creation nor Alembic installs them. The historical `backup.sql` is not
 needed for this path.
 
-## Verification results
+## Database verification results (2026-10-01)
 
 - Fresh database: 13 domain tables, 61 sample rows, 7 characters, and the
   recorded Alembic revision `c002697e0070`.
@@ -100,3 +102,82 @@ needed for this path.
 Verification used temporary database names and available local HTTP ports.
 The temporary databases were removed and the verification API processes
 stopped. The existing project database received read requests only.
+
+## Python environment for a new checkout
+
+The database verification above used an existing environment. For a new
+checkout, create one and install the pinned dependencies from the repository root:
+
+```powershell
+py -3.13 -m venv venv
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+Copy-Item .env.example .env
+```
+
+Copy the example only when creating a new `.env`; preserve any existing local
+configuration. Set the database variables in that file before importing the
+application or running database scripts. A fresh dependency installation was
+not part of the recorded database verification.
+
+The UI needs no frontend build or npm installation. Node 22 is used by CI for
+the frontend tests, not for serving the application.
+
+## LM Studio and the Ask UI
+
+The local setup uses **LM Studio 0.4.25** with **Qwen3 4B Instruct 2507,
+Q4_K_M**, served under the model identifier `qwen/qwen3-4b-2507`.
+
+1. Load that model in LM Studio.
+2. Start LM Studio's local server at `http://127.0.0.1:1234`.
+3. Keep MySQL/MariaDB running and use the configured, populated project database.
+4. Confirm these values in `.env` (they match the application defaults):
+
+```dotenv
+LM_STUDIO_BASE_URL=http://127.0.0.1:1234
+LM_STUDIO_MODEL=qwen/qwen3-4b-2507
+LM_STUDIO_TIMEOUT_SECONDS=120
+```
+
+The base URL is the server root: the application appends
+`/v1/chat/completions`. No API key is required. The application uses chat
+completions with JSON-schema response formatting and validates the returned
+JSON structure itself with Pydantic; it does not use the OpenAI Responses API.
+
+Start the production application:
+
+```powershell
+.\venv\Scripts\python.exe -m uvicorn api.main:app --host 127.0.0.1 --port 8000
+```
+
+Visit `http://127.0.0.1:8000/` and ask **“Who is Percy Jackson's parent?”**.
+A successful result shows the answer, database facts, and attributed evidence
+with source links. The development-only `scripts.preview_frontend` server
+uses mocks and is not an end-to-end inference check.
+
+Local inference can take roughly a minute or longer on the tested Snapdragon X
+machine. The 120-second setting is passed to httpx for provider timeouts; it is
+not a response-time guarantee. An unavailable LM Studio server produces 503,
+a provider timeout produces 504, and invalid model output or other provider
+HTTP failures produce 502. The application does not switch providers or invent
+an answer when a request fails.
+
+## Offline tests and evaluation
+
+Run with the project virtual environment active, or substitute its full Python path:
+
+```powershell
+python -m pytest
+node --test tests/frontend/app.test.mjs
+python -m ruff check .
+python -m ruff format --check .
+python -m scripts.evaluate
+```
+
+Tests and evaluation use isolated SQLite fixtures and no live model calls.
+They still import settings: retain `DB_USER` and `DB_NAME` in `.env`, or set
+dummy values in a separate test shell. No running MariaDB server is required.
+
+The evaluator prints the full report without changing the saved results.
+It currently exits **1** for the known Case 08 paraphrase failure (17/18 cases
+pass). That is a recorded retrieval limitation, not a model-accuracy score or
+a failure of the automated test suite. See [the saved results](../evaluation/results.json).

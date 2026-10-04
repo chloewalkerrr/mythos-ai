@@ -9,7 +9,7 @@
 
 This document exists to answer one question for any reader (including future me): **why does this project exist, and what is it trying to prove?**
 
-It intentionally does not describe how the system works today (`ARCHITECTURE.md`) or what's planned next (`ROADMAP.md` / `DEVELOPMENT_ROADMAP.md`). It describes intent, principles, and constraints that should stay stable even as the code changes significantly.
+It describes the project's motivation and original engineering principles. For the finished MVP, see the [main README](../README.md) and [current architecture](ARCHITECTURE.md). The roadmap documents preserve historical planning, not current commitments.
 
 ---
 
@@ -23,7 +23,7 @@ Chloe Walker
 
 ## What MythosAI is
 
-MythosAI is an AI-powered knowledge and reasoning platform built on a structured model of the Percy Jackson universe. It began as a university Database Systems project (CMSC 4323) focused on relational database design, and is now being independently extended into a long-term AI engineering, backend engineering, and data systems portfolio project.
+MythosAI is an evidence-grounded explorer for the Percy Jackson universe. It began as a university Database Systems project (CMSC 4323) and evolved into a local portfolio MVP combining relational facts, attributed lexical retrieval, and local Qwen generation. The broader ambitions below provide historical context, not claims about implemented functionality.
 
 The Percy Jackson universe is the knowledge domain — chosen because it contains a large, richly interconnected set of entities (characters, gods, powers, quests, monsters, locations, books, prophecies) that is understandable, testable, and interesting to work with, while the underlying engineering techniques are intended to generalise to any structured/unstructured knowledge domain, including enterprise use cases.
 

@@ -1,5 +1,7 @@
 # MythosAI Development Roadmap
 
+> **Historical planning document.** This preserves earlier ideas, including systems intentionally not implemented in the finished MVP; its status lists are not current. See the [main README](../README.md) and [current architecture](ARCHITECTURE.md) for what was built.
+
 ## 1. Project Vision
 
 MythosAI is an AI-powered knowledge and reasoning platform built on a structured model of the Percy Jackson universe.
